@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+/* 1. Register Template Theme Colors and Fonts */
+@theme {
+  --color-primary: #5540af;
+  --color-yellow: #facc15;
+  --color-lila: #d8b4fe;
+  
+  --font-header: "Raleway", sans-serif;
+  --font-body: "Open Sans", sans-serif;
+
+  /* Keep Next.js defaults if needed */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* 2. Global Styles from Template */
+html {
+  @apply font-body antialiased scroll-smooth;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* 3. Utility class for Template Container */
+.container {
+  @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+}
