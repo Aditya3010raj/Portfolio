@@ -36,7 +36,10 @@ body {
   color: var(--foreground);
 }
 
-/* 3. Utility class for Template Container */
+/* 3. Utility classNameName for Template Container */
 .container {
   @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+}
+html {
+  scroll-behavior: smooth;
 }
