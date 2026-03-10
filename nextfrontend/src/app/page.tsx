@@ -3,10 +3,30 @@ import Link from "next/link";
 import Head from "next/head";
 import Script from "next/script";
 import { blob } from "stream/consumers";
+import MobileMenu from "../Components/Mobilemenu";
 export default async function Home() {
+   // Fetch the specific event data by slug
+  {/*const profileQuery = `*[_type == "profile"][0]{
+  name,
+  headline,
+  bio,
+  image,
+  skills,
+  socialLinks
+}`;*/}
+  const profile = {
+    title: "Adityaraj Chatterjee",
+    name: "Adityaraj Chatterjee",
+    age: "20",
+    image: "/assets/img/blog-author.jpeg",
+    twitterlink: "https://x.com/AdityarajC3010",
+    instagramLink: "https://www.instagram.com/chatterjeeadityaraj/",
+    linkedinLink: "https://www.linkedin.com/in/adityaraj-chatterjee-42162a372/"
+  }
   // Fetch latest events/posts for the template
   const query = `*[_type == "event"][0...3]{ _id, name, slug, mainImage }`;
   const events = await client.fetch(query);
+  {/*const profile = await client.fetch(profileQuery);*/}
 
   return (
     <>
@@ -19,7 +39,7 @@ export default async function Home() {
 
         <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport" />
 
-        <title>Homepage | Atom Template</title>
+        <title>Adityaraj Chatterjee</title>
 
         <meta property="og:title" content="Homepage | Atom Template" />
 
@@ -80,7 +100,7 @@ export default async function Home() {
             <div className="container flex items-center justify-between">
               <div>
                 <a href="/">
-                  <img src="/assets/img/logo.svg" className="w-24 lg:w-48" alt="logo image" />
+                  <h2 className="text-2xl font-bold text-white">Adityaraj Chatterjee</h2>
                 </a>
               </div>
               <div className="hidden lg:block">
@@ -89,8 +109,8 @@ export default async function Home() {
                   <li className="group pl-6">
                     <a href="#about" className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">
 
-                    <span
-                      className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">About</span></a>
+                      <span
+                        className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">About</span></a>
 
                     <span className="block h-0.5 w-full bg-transparent group-hover:bg-yellow"></span>
                   </li>
@@ -99,8 +119,8 @@ export default async function Home() {
                     <a href="#services" className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">
 
 
-                    <span
-                      className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">Services</span></a>
+                      <span
+                        className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">Services</span></a>
 
                     <span className="block h-0.5 w-full bg-transparent group-hover:bg-yellow"></span>
                   </li>
@@ -109,48 +129,48 @@ export default async function Home() {
                     <a href="#portfolio" className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">
 
 
-                    <span
-                      className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">Portfolio</span></a>
+                      <span
+                        className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">Portfolio</span></a>
 
                     <span className="block h-0.5 w-full bg-transparent group-hover:bg-yellow"></span>
                   </li>
 
                   <li className="group pl-6">
-                   <a href="#clients" className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">
-                    <span
-                      className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">Clients</span></a>
+                    <a href="#clients" className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">
+                      <span
+                        className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">Clients</span></a>
 
                     <span className="block h-0.5 w-full bg-transparent group-hover:bg-yellow"></span>
                   </li>
 
                   <li className="group pl-6">
                     <a href="#work" className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">
-                    <span
-                      className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">Work</span></a>
+                      <span
+                        className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">Work</span></a>
 
                     <span className="block h-0.5 w-full bg-transparent group-hover:bg-yellow"></span>
                   </li>
 
                   <li className="group pl-6">
-                      <a href="#statistics" className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">
-                    <span
-                      className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">Statistics</span></a>
+                    <a href="#statistics" className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">
+                      <span
+                        className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">Statistics</span></a>
 
                     <span className="block h-0.5 w-full bg-transparent group-hover:bg-yellow"></span>
                   </li>
 
                   <li className="group pl-6">
                     <a href="#blog" className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">
-                    <span
-                      className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">Blog</span></a>
+                      <span
+                        className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">Blog</span></a>
 
                     <span className="block h-0.5 w-full bg-transparent group-hover:bg-yellow"></span>
                   </li>
 
                   <li className="group pl-6">
                     <a href="#contact" className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">
-                    <span
-                      className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">Contact</span></a>
+                      <span
+                        className="cursor-pointer pt-0.5 font-header font-semibold uppercase text-white">Contact</span></a>
 
                     <span className="block h-0.5 w-full bg-transparent group-hover:bg-yellow"></span>
                   </li>
@@ -158,9 +178,9 @@ export default async function Home() {
                 </ul>
               </div>
               <div className="block lg:hidden">
-                <button >
-                  <i className="bx bx-menu text-4xl text-white"></i>
-                </button>
+                
+                  <MobileMenu/>
+               
               </div>
             </div>
           </div>
@@ -244,12 +264,12 @@ export default async function Home() {
               <div className="container relative z-30 pt-20 pb-12 sm:pt-56 sm:pb-48 lg:pt-64 lg:pb-48">
                 <div className="flex flex-col items-center justify-center lg:flex-row">
                   <div className="rounded-full border-8 border-primary shadow-xl">
-                    <img src="/assets/img/blog-author.jpg" className="h-48 rounded-full sm:h-56" alt="author" />
+                    <img src={profile.image} className="h-48 rounded-full sm:h-56" alt="author" />
                   </div>
 
                   <div className="pt-8 sm:pt-10 lg:pl-8 lg:pt-0">
                     <h1 className="text-center font-header text-4xl text-white sm:text-left sm:text-5xl md:text-6xl">
-                      Hello I'm Christy Smith!
+                      Hello I'm {profile.name}!
                     </h1>
                     <div className="flex flex-col justify-center pt-3 sm:flex-row sm:pt-5 lg:justify-start">
                       <div className="flex items-center justify-center pl-0 sm:justify-start md:pl-1">
@@ -259,19 +279,15 @@ export default async function Home() {
                         </div>
                       </div>
                       <div className="flex items-center justify-center pt-5 pl-2 sm:justify-start sm:pt-0">
-                        <a href="/">
-                          <i className="bx bxl-facebook-square text-2xl text-white hover:text-yellow"></i>
-                        </a>
-                        <a href="/" className="pl-4">
+
+                        <a href={profile.twitterlink} className="pl-4">
                           <i className="bx bxl-twitter text-2xl text-white hover:text-yellow"></i>
                         </a>
-                        <a href="/" className="pl-4">
-                          <i className="bx bxl-dribbble text-2xl text-white hover:text-yellow"></i>
-                        </a>
-                        <a href="/" className="pl-4">
+
+                        <a href={profile.linkedinLink} className="pl-4">
                           <i className="bx bxl-linkedin text-2xl text-white hover:text-yellow"></i>
                         </a>
-                        <a href="/" className="pl-4">
+                        <a href={profile.instagramLink} className="pl-4">
                           <i className="bx bxl-instagram text-2xl text-white hover:text-yellow"></i>
                         </a>
                       </div>
@@ -288,7 +304,7 @@ export default async function Home() {
                     Who am I?
                   </h2>
                   <h4 className="pt-6 font-header text-xl font-medium text-black sm:text-2xl lg:text-3xl">
-                    I'm Christy Smith, a Web Designer & Photographer
+                    I'm Adityaraj Chatterjee, a Developer and a Second Year Student
                   </h4>
                   <p className="pt-6 font-body leading-relaxed text-grey-20">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -309,19 +325,15 @@ export default async function Home() {
                       </div>
                     </div>
                     <div className="flex items-center justify-center pt-5 pl-2 sm:justify-start sm:pt-0">
-                      <a href="/">
-                        <i className="bx bxl-facebook-square text-2xl text-primary hover:text-yellow"></i>
-                      </a>
-                      <a href="/" className="pl-4">
+
+                      <a href={profile.twitterlink} className="pl-4">
                         <i className="bx bxl-twitter text-2xl text-primary hover:text-yellow"></i>
                       </a>
-                      <a href="/" className="pl-4">
-                        <i className="bx bxl-dribbble text-2xl text-primary hover:text-yellow"></i>
-                      </a>
-                      <a href="/" className="pl-4">
+
+                      <a href={profile.linkedinLink} className="pl-4">
                         <i className="bx bxl-linkedin text-2xl text-primary hover:text-yellow"></i>
                       </a>
-                      <a href="/" className="pl-4">
+                      <a href={profile.instagramLink} className="pl-4">
                         <i className="bx bxl-instagram text-2xl text-primary hover:text-yellow"></i>
                       </a>
                     </div>
@@ -900,22 +912,16 @@ export default async function Home() {
           <div className="bg-primary">
             <div className="container flex flex-col justify-between py-6 sm:flex-row">
               <p className="text-center font-body text-white md:text-left">
-                © Copyright 2022. All right reserved, ATOM.
+                Lets Build Together.
               </p>
               <div className="flex items-center justify-center pt-5 sm:justify-start sm:pt-0">
-                <a href="/">
-                  <i className="bx bxl-facebook-square text-2xl text-white hover:text-yellow"></i>
-                </a>
-                <a href="/" className="pl-4">
+                <a href={profile.twitterlink} className="pl-4">
                   <i className="bx bxl-twitter text-2xl text-white hover:text-yellow"></i>
                 </a>
-                <a href="/" className="pl-4">
-                  <i className="bx bxl-dribbble text-2xl text-white hover:text-yellow"></i>
-                </a>
-                <a href="/" className="pl-4">
+                <a href={profile.linkedinLink} className="pl-4">
                   <i className="bx bxl-linkedin text-2xl text-white hover:text-yellow"></i>
                 </a>
-                <a href="/" className="pl-4">
+                <a href={profile.instagramLink} className="pl-4">
                   <i className="bx bxl-instagram text-2xl text-white hover:text-yellow"></i>
                 </a>
               </div>

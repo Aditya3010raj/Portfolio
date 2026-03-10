@@ -8,6 +8,15 @@ export const client = createClient({
   apiVersion: "2023-01-01",
   useCdn: false,
 });
+export interface Project {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  mainImage: any; // Using any for Sanity Image source
+  techStack: string[];
+  description: string;
+  body: any[]; // PortableText blocks
+}
 
 // Use the new named builder function
 const builder = createImageUrlBuilder(client);

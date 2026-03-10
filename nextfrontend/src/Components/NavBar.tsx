@@ -6,7 +6,7 @@ export default function Navbar() {
       <div className="container flex items-center justify-between mx-auto px-4">
         <div>
           <Link href="/">
-            <img src="/assets/img/logo.svg" className="w-24 lg:w-48" alt="logo" />
+            <h2>Adityaraj Chatterjee</h2>
           </Link>
         </div>
         <div className="hidden lg:block">
