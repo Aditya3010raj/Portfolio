@@ -1,60 +1,86 @@
 import { client, urlFor } from "../../../lib/sanity";
 import { PortableText } from "@portabletext/react";
-import Navbar from "../../../Components/NavBar";
 import Script from "next/script";
 import BlogNav from "../../../Components/BlogNav";
 import type { Metadata } from 'next';
 
-// 1. DYNAMIC METADATA
+// 1. CUSTOM PORTABLE TEXT COMPONENTS (Handles H2/H3/List styling)
+const portableTextComponents = {
+  block: {
+    h1: ({ children }: any) => <h1 className="text-4xl font-bold mt-10 mb-4 text-primary dark:text-yellow uppercase tracking-tight">{children}</h1>,
+    h2: ({ children }: any) => <h2 className="text-3xl font-bold mt-8 mb-4 text-primary dark:text-yellow border-l-4 border-yellow pl-4 italic">{children}</h2>,
+    h3: ({ children }: any) => <h3 className="text-2xl font-semibold mt-6 mb-3 text-slate-800 dark:text-slate-200">{children}</h3>,
+    h4: ({ children }: any) => <h4 className="text-xl font-bold mt-4 mb-2">{children}</h4>,
+    normal: ({ children }: any) => <p className="text-lg leading-relaxed mb-6 text-grey-20 dark:text-grey-10">{children}</p>,
+    blockquote: ({ children }: any) => (
+      <blockquote className="border-l-4 border-yellow bg-slate-50 dark:bg-slate-900 p-6 my-8 italic text-xl shadow-inner">
+        {children}
+      </blockquote>
+    ),
+  },
+  list: {
+    bullet: ({ children }: any) => <ul className="list-disc list-inside mb-6 space-y-2 ml-4 text-lg">{children}</ul>,
+    number: ({ children }: any) => <ol className="list-decimal list-inside mb-6 space-y-2 ml-4 text-lg">{children}</ol>,
+  },
+  marks: {
+    strong: ({ children }: any) => <strong className="font-bold text-primary dark:text-yellow">{children}</strong>,
+    link: ({ children, value }: any) => (
+      <a href={value.href} className="text-yellow hover:underline decoration-2 underline-offset-4 font-semibold">
+        {children}
+      </a>
+    ),
+  },
+};
+
+// 2. DYNAMIC METADATA
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const post = await client.fetch(`*[_type == "event" && slug.current == $slug][0]{name}`, { slug });
+  const post = await client.fetch(`*[_type == "event" && slug.current == $slug][0]{title}`, { slug });
 
   return {
-    title: post?.name ? `${post.name} | Adityaraj Chatterjee` : 'Blog Post',
-    description: "Project case study and blog post by Adityaraj Chatterjee",
+    title: post?.title ? `${post.title} | Adityaraj Chatterjee` : 'Blog Post',
+    description: "Project case study by Adityaraj Chatterjee",
     openGraph: {
-      title: post?.name,
+      title: post?.title,
       images: ['/assets/img/social.jpg'],
     },
   };
 }
 
-const profile = {
+const defaultProfile = {
   name: "Adityaraj Chatterjee",
+  headline: "Software Engineer",
+  bio: "I am a Software Engineer with a passion for building modern web solutions and embedded systems.",
   image: "/assets/img/blog-author.jpeg",
-  twitterlink: "https://x.com/AdityarajC3010",
-  instagramLink: "https://www.instagram.com/chatterjeeadityaraj/",
-  linkedinLink: "https://www.linkedin.com/in/adityaraj-chatterjee-42162a372/"
+  githubLink: "https://github.com/Aditya3010raj",
 };
 
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  // 2. FETCH CURRENT POST TIMESTAMP FIRST
+  // 3. FETCH CURRENT POST TIMESTAMP
   const currentPostDate = await client.fetch(
     `*[_type == "event" && slug.current == $slug][0]._createdAt`,
     { slug }
   );
 
-  // 3. FETCH DATA WITH SIBLINGS USING EXPLICIT DATE COMPARISON
+  // 4. FETCH DATA WITH SIBLINGS
   const query = `{
     "post": *[_type == "event" && slug.current == $slug][0]{
-      name,
+      title,
       body,
       mainImage,
+      projectType,
+      status,
+      techStack,
+      projectLinks,
+      duration,
+      myRole,
       _createdAt,
-      "slug": slug.current,
-      "authorName": author->name,   
-      "authorImage": author->image, 
-      "authorBio": author->bio      
-    },
-    "next": *[_type == "event" && _createdAt > $date] | order(_createdAt asc)[0]{
       "slug": slug.current
     },
-    "prev": *[_type == "event" && _createdAt < $date] | order(_createdAt desc)[0]{
-      "slug": slug.current
-    }
+    "next": *[_type == "event" && _createdAt > $date] | order(_createdAt asc)[0]{ "slug": slug.current },
+    "prev": *[_type == "event" && _createdAt < $date] | order(_createdAt desc)[0]{ "slug": slug.current }
   }`;
 
   const { post, next, prev } = await client.fetch(query, { 
@@ -66,98 +92,124 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
   return (
     <>
-      <div id="main" className="relative">
-        {/* HEADER / NAVIGATION */}
-        <div className="w-full z-50 top-0 py-3 sm:py-5 bg-primary">
-          <div className="container flex items-center justify-between mx-auto px-4">
-            <div>
-              <a href="/">
-                <h2 className="text-2xl font-bold text-white">Adityaraj Chatterjee</h2>
-              </a>
-            </div>
-            <div className="hidden lg:block">
-              <ul className="flex items-center">
-                <li className="group pl-6">
-                  <a href="/#about" className="pt-0.5 font-header font-semibold uppercase text-white hover:text-yellow transition-colors">About</a>
-                  <span className="block h-0.5 w-full bg-transparent group-hover:bg-yellow transition-all"></span>
-                </li>
-                <li className="group pl-6">
-                  <a href="/#work" className="pt-0.5 font-header font-semibold uppercase text-white hover:text-yellow transition-colors">Work</a>
-                  <span className="block h-0.5 w-full bg-transparent group-hover:bg-yellow transition-all"></span>
-                </li>
-                <li className="group pl-6">
-                  <a href="/#blog" className="pt-0.5 font-header font-semibold uppercase text-white hover:text-yellow transition-colors">Blog</a>
-                  <span className="block h-0.5 w-full bg-transparent group-hover:bg-yellow transition-all"></span>
-                </li>
-              </ul>
-            </div>
+      <div className="relative bg-white text-black dark:bg-slate-950 dark:text-white min-h-screen transition-colors duration-300">
+        
+        {/* NAV BAR WITH AC LOGO */}
+        <div className="w-full bg-primary dark:bg-slate-900 py-6 border-b border-yellow/20">
+          <div className="container mx-auto px-6 flex justify-between items-center">
+            <a href="/" className="flex items-center gap-3 group">
+              {/* YELLOW AC CIRCLE LOGO */}
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow shadow-lg transition-transform group-hover:scale-110">
+                <span className="text-sm font-black text-black">AC</span>
+              </div>
+              <h2 className="text-2xl font-bold text-white tracking-tighter">{defaultProfile.name}</h2>
+            </a>
+            <a href="/blog" className="text-white font-bold hover:text-yellow transition-all uppercase text-sm tracking-widest">Back to Archive</a>
           </div>
         </div>
 
-        {/* POST CONTENT */}
-        <div className="container py-6 md:py-10 mx-auto px-4">
-          <div className="mx-auto max-w-4xl">
-            <h1 className="pt-5 font-body text-3xl font-semibold text-primary sm:text-4xl md:text-5xl xl:text-6xl">
-              {post.name}
-            </h1>
+        <div className="container py-10 mx-auto px-6">
+          <article className="mx-auto max-w-4xl">
+            {/* BADGE */}
+            <div className="mb-6">
+               <span className="bg-yellow text-black px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">
+                 {post.projectType || "Project"}
+               </span>
+            </div>
             
-            <div className="flex items-center pt-5 pb-10">
-               <span className="font-body font-bold text-grey-10">By {post.authorName || profile.name}</span>
-               <span className="px-3 text-grey-30">|</span>
-               <span className="font-body text-grey-30">{new Date(post._createdAt).toLocaleDateString()}</span>
+            <h1 className="text-4xl md:text-6xl font-black text-primary dark:text-yellow leading-tight mb-8">
+              {post.title}
+            </h1>
+
+            {/* INFO BAR */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 p-6 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-800 mb-10">
+              <div>
+                <p className="text-[10px] text-grey-30 dark:text-grey-20 uppercase font-black tracking-widest mb-1">Status</p>
+                <p className="text-sm font-bold">{post.status || 'Completed'}</p>
+              </div>
+              <div>
+                <p className="text-[10px] text-grey-30 dark:text-grey-20 uppercase font-black tracking-widest mb-1">My Role</p>
+                <p className="text-sm font-bold">{post.myRole || 'Full-Stack Developer'}</p>
+              </div>
+              <div>
+                <p className="text-[10px] text-grey-30 dark:text-grey-20 uppercase font-black tracking-widest mb-1">Duration</p>
+                <p className="text-sm font-bold">{post.duration || '2 Months'}</p>
+              </div>
+              <div>
+                <p className="text-[10px] text-grey-30 dark:text-grey-20 uppercase font-black tracking-widest mb-1">Published</p>
+                <p className="text-sm font-bold">{new Date(post._createdAt).toLocaleDateString()}</p>
+              </div>
             </div>
 
+            {/* MAIN IMAGE */}
             {post.mainImage && (
-              <div className="relative w-full aspect-video mb-12 rounded-xl overflow-hidden shadow-xl bg-grey-50">
-                <img
-                  src={urlFor(post.mainImage).url()}
-                  alt={post.name}
-                  className="w-full h-full object-cover"
+              <div className="relative w-full aspect-video mb-12 rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-slate-800">
+                <img 
+                  src={urlFor(post.mainImage).url()} 
+                  alt={post.title} 
+                  className="w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-700" 
                 />
               </div>
             )}
 
-            <div className="prose lg:prose-xl max-w-none font-body text-grey-20 leading-relaxed">
-              <PortableText value={post.body} />
-            </div>
-
-            {/* NAVIGATION COMPONENT */}
-            <BlogNav prevSlug={prev?.slug} nextSlug={next?.slug} />
-
-            {/* AUTHOR SECTION */}
-            <div className="flex flex-col items-center border-t border-lila py-12 mt-12 md:flex-row md:items-start">
-              <div className="w-32 md:w-48 flex-shrink-0">
-                <img src={profile.image} className="rounded-full shadow-lg border-2 border-primary" alt="author" />
-              </div>
-              <div className="ml-0 text-center md:ml-10 md:w-5/6 md:text-left">
-                <h3 className="pt-5 md:pt-0 font-body text-2xl font-bold text-secondary">
-                  {profile.name}
+            {/* TECH STACK */}
+            {post.techStack && (
+              <div className="mb-12">
+                <h3 className="text-sm font-black uppercase tracking-widest mb-4 flex items-center gap-2 opacity-60">
+                  Built With
                 </h3>
-                <p className="pt-3 font-body text-grey-30">
-                   {post.authorBio || "Embedded Systems and Software Developer. Student at VIT."}
-                </p>
-                <div className="flex items-center justify-center pt-5 md:justify-start">
-                  <a href={profile.twitterlink} className="pr-4 text-primary hover:text-yellow transition-colors">
-                    <i className="bx bxl-twitter text-2xl"></i>
-                  </a>
-                  <a href={profile.linkedinLink} className="pr-4 text-primary hover:text-yellow transition-colors">
-                    <i className="bx bxl-linkedin text-2xl"></i>
-                  </a>
-                  <a href={profile.instagramLink} className="pr-4 text-primary hover:text-yellow transition-colors">
-                    <i className="bx bxl-instagram text-2xl"></i>
-                  </a>
+                <div className="flex flex-wrap gap-3">
+                  {post.techStack.map((tech: any, idx: number) => (
+                    <span key={idx} className="flex items-center gap-2 bg-white dark:bg-slate-800 px-4 py-2 rounded-xl text-sm font-bold border border-slate-200 dark:border-slate-700 shadow-sm">
+                      {tech.icon && <i className={`bx ${tech.icon} text-primary dark:text-yellow text-xl`}></i>}
+                      {tech.name}
+                    </span>
+                  ))}
                 </div>
               </div>
+            )}
+
+            {/* THE CONTENT */}
+            <div className="font-body">
+              <PortableText value={post.body} components={portableTextComponents} />
             </div>
-          </div>
+
+            {/* ACTION LINKS */}
+            {post.projectLinks && (
+              <div className="mt-16 p-8 bg-primary dark:bg-yellow rounded-3xl flex flex-wrap gap-6 items-center justify-between shadow-xl">
+                <h4 className="text-2xl font-black text-white dark:text-black">Like the project?</h4>
+                <div className="flex flex-wrap gap-4">
+                  {post.projectLinks.live && (
+                    <a href={post.projectLinks.live} target="_blank" className="bg-white text-primary px-8 py-3 rounded-full hover:scale-105 transition-all font-black shadow-lg">
+                      Live View
+                    </a>
+                  )}
+                  {post.projectLinks.github && (
+                    <a href={post.projectLinks.github} target="_blank" className="bg-black text-white px-8 py-3 rounded-full hover:scale-105 transition-all font-black shadow-lg">
+                      Github
+                    </a>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* FIXED NAV */}
+            <BlogNav prevSlug={prev?.slug} nextSlug={next?.slug} />
+
+            {/* AUTHOR */}
+            <div className="mt-20 pt-10 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row items-center md:items-start gap-8">
+              <img src={defaultProfile.image} className="w-24 h-24 rounded-2xl rotate-3 shadow-lg" alt="author" />
+              <div className="text-center md:text-left">
+                <h3 className="text-2xl font-black">{defaultProfile.name}</h3>
+                <p className="text-grey-30 dark:text-grey-20 mt-2 italic leading-relaxed">{defaultProfile.bio}</p>
+              </div>
+            </div>
+          </article>
         </div>
 
-        {/* FOOTER */}
-        <div className="bg-primary py-6 mt-10">
-          <div className="container mx-auto px-4 flex justify-center items-center">
-            <p className="font-body text-white">Lets Build Together</p>
-          </div>
-        </div>
+        <footer className="bg-slate-50 dark:bg-slate-900 py-12 mt-20 text-center">
+            <p className="text-xs font-black uppercase tracking-[0.3em] opacity-40">Made with ❤️ by Adityaraj Chatterjee</p>
+        </footer>
       </div>
 
       <Script src="/assets/js/main.js" strategy="lazyOnload" />
