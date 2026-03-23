@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd nextfrontend && npm run build",
+  "installCommand": "cd nextfrontend && npm install --legacy-peer-deps",
+  "outputDirectory": "nextfrontend/.next",
+  "framework": "nextjs"
+}
