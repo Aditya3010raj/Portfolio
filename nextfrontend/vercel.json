@@ -1,0 +1,6 @@
+{
+  "framework": "nextjs",
+  "rootDirectory": "nextfrontend",
+  "installCommand": "npm install --legacy-peer-deps",
+  "buildCommand": "next build"
+}
