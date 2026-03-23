@@ -58,15 +58,15 @@ export default async function Home() {
 
               <div className="pt-8 sm:pt-10 lg:pl-8 lg:pt-0">
                 {profile?.availability && (
-                    <span className="inline-block bg-yellow text-black px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-4">
-                        ● {profile.availability === 'available' ? 'Available for Work' : 'Open to Opportunities'}
-                    </span>
+                  <span className="inline-block bg-yellow text-black px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-4">
+                    ● {profile.availability === 'available' ? 'Available for Work' : 'Open to Opportunities'}
+                  </span>
                 )}
                 <h1 className="text-center font-header text-4xl text-white sm:text-left sm:text-5xl md:text-6xl font-black tracking-tight">
                   I'm {profile?.name}
                 </h1>
                 <p className="text-center sm:text-left text-yellow font-bold uppercase tracking-widest mt-2">{profile?.headline}</p>
-                
+
                 <div className="flex flex-col justify-center pt-6 sm:flex-row sm:pt-8 lg:justify-start">
                   <div className="flex items-center justify-center gap-6">
                     {profile?.socialLinks?.github && <a href={profile.socialLinks.github} target="_blank" className="hover:scale-125 transition-transform"><i className="bx bxl-github text-4xl text-white hover:text-yellow"></i></a>}
@@ -92,17 +92,20 @@ export default async function Home() {
                   {profile?.bio}
                 </p>
                 {profile?.experience && <p className="mt-4 text-sm italic opacity-70 border-t pt-4 border-slate-200 dark:border-slate-800">{profile.experience}</p>}
-                
+
                 <div className="pt-10 flex flex-wrap gap-4">
                   <a href={`mailto:${profile?.email}`} className="bg-primary text-white px-8 py-4 rounded-xl font-bold uppercase tracking-widest hover:bg-yellow hover:text-black transition-all shadow-lg">Hire Me</a>
                   {profile?.resumeUrl && <a href={profile.resumeUrl} target="_blank" className="border-2 border-primary dark:border-yellow text-primary dark:text-yellow px-8 py-4 rounded-xl font-bold uppercase tracking-widest hover:bg-primary dark:hover:bg-yellow hover:text-white dark:hover:text-black transition-all">View Resume</a>}
                 </div>
               </div>
-              
+
               <div className="w-full lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-xl border-t-4 border-yellow">
                   <i className="bx bx-rocket text-4xl text-yellow mb-4"></i>
-                  <h3 className="text-2xl font-black text-primary dark:text-white">{profile?.yearsOfExperience || "2"}</h3>
+                  {/* Ensure we convert the number to a string and provide a fallback */}
+                  <h3 className="text-2xl font-black text-primary dark:text-white">
+                    {profile?.yearsOfExperience?.toString() || "0"}
+                  </h3>
                   <p className="text-sm font-bold uppercase tracking-widest text-grey-30 dark:text-grey-20">Years Experience</p>
                 </div>
                 <div className="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-xl border-t-4 border-primary">
@@ -188,8 +191,8 @@ export default async function Home() {
                     {profile.certifications.map((cert: any, i: number) => (
                       <div key={i} className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-yellow transition-colors">
                         <div>
-                            <h4 className="font-bold text-sm">{cert.name}</h4>
-                            <p className="text-[10px] opacity-60 uppercase font-black">{cert.issuer} • {cert.date}</p>
+                          <h4 className="font-bold text-sm">{cert.name}</h4>
+                          <p className="text-[10px] opacity-60 uppercase font-black">{cert.issuer} • {cert.date}</p>
                         </div>
                         {cert.url && <a href={cert.url} target="_blank" className="text-yellow hover:scale-110 transition-transform"><i className="bx bx-link-external text-xl"></i></a>}
                       </div>
@@ -209,14 +212,14 @@ export default async function Home() {
                 <h2 className="font-header text-4xl font-black uppercase text-white sm:text-5xl">Selected Work</h2>
                 <p className="pt-4 text-slate-300 text-lg italic">A collection of architectural solutions and high-performance applications.</p>
               </div>
-              <Link 
-                href="/blog" 
+              <Link
+                href="/blog"
                 className="group flex items-center gap-3 bg-yellow px-8 py-4 rounded-xl font-black uppercase tracking-widest text-black shadow-xl hover:scale-105 transition-all"
               >
                 View Archive <i className="bx bx-right-arrow-alt text-2xl group-hover:translate-x-2 transition-transform"></i>
               </Link>
             </div>
-            
+
             <div className="grid w-full grid-cols-1 gap-10 lg:grid-cols-3">
               {displayProjects.map((event: any, idx: number) => (
                 <Link key={idx} href={`/blog/${event.slug.current}`} className="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-2xl transition-all">
@@ -227,9 +230,9 @@ export default async function Home() {
                       alt={event.title}
                     />
                     <div className="absolute top-6 left-6">
-                        <span className="bg-yellow text-black px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-xl">
-                            {event.category || "Project"}
-                        </span>
+                      <span className="bg-yellow text-black px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-xl">
+                        {event.category || "Project"}
+                      </span>
                     </div>
                   </div>
                   <div className="p-8">
@@ -240,7 +243,7 @@ export default async function Home() {
                       {event.metadesc}
                     </p>
                     <div className="mt-8 flex items-center gap-2 font-black text-xs uppercase tracking-widest text-primary dark:text-yellow">
-                        Project Details <i className="bx bx-right-arrow-alt text-xl"></i>
+                      Project Details <i className="bx bx-right-arrow-alt text-xl"></i>
                     </div>
                   </div>
                 </Link>
@@ -253,7 +256,7 @@ export default async function Home() {
         <div className="container py-24" id="contact">
           <div className="bg-yellow rounded-[3rem] p-10 md:p-20 flex flex-col lg:flex-row items-center justify-between gap-12 shadow-2xl">
             <div className="max-w-xl text-center lg:text-left">
-              <h2 className="text-4xl md:text-6xl font-black text-black uppercase tracking-tighter leading-tight">Let's build <br/> something epic.</h2>
+              <h2 className="text-4xl md:text-6xl font-black text-black uppercase tracking-tighter leading-tight">Let's build <br /> something epic.</h2>
               <div className="mt-10 flex flex-col gap-6">
                 {profile?.email && (
                   <div className="flex items-center gap-4 justify-center lg:justify-start">
@@ -291,7 +294,7 @@ export default async function Home() {
 
         {/* FOOTER */}
         <footer className="py-12 text-center border-t border-slate-100 dark:border-slate-800">
-            <p className="text-xs font-black uppercase tracking-[0.5em] opacity-40">Adityaraj Chatterjee • {new Date().getFullYear()}</p>
+          <p className="text-xs font-black uppercase tracking-[0.5em] opacity-40">Adityaraj Chatterjee • {new Date().getFullYear()}</p>
         </footer>
 
       </div>
